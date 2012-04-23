@@ -32,9 +32,11 @@
     <Reference Include="System" />
     <Reference Include="ICSharpCode.SharpZipLib" />
     <Reference Include="System.Core" />
-    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
-      <Private>False</Private>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="nunit.core">
+      <HintPath>..\lib\nunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\lib\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -260,7 +262,6 @@
     <Compile Include="NGit\BranchConfigTest.cs" />
     <Compile Include="NGit\BranchTrackingStatusTest.cs" />
     <Compile Include="NGit\ReflogResolveTest.cs" />
-    <Compile Include="NGit.Transport\SpiTransport.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
