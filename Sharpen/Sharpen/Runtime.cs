@@ -85,7 +85,11 @@ namespace Sharpen
 			if (properties == null) {
 				properties = new Hashtable ();
 				properties ["jgit.fs.debug"] = "false";
+#if NET_3_5_BACKPORT
+				properties ["user.home"] = GetUserProfileFolderPath ();
+#else
 				properties ["user.home"] = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
+#endif
 				properties ["java.library.path"] = Environment.GetEnvironmentVariable ("PATH");
 				if (Path.DirectorySeparatorChar != '\\')
 					properties ["os.name"] = "Unix";
@@ -246,5 +250,24 @@ namespace Sharpen
 				return new UTF8Encoding (false, true);
 			return e;
 		}
+
+#if NET_3_5_BACKPORT
+		const int MAX_PATH = 260;
+		const int CSIDL_PROFILE = 40;
+		const uint COR_E_PLATFORMNOTSUPPORTED = 0x80131539;
+
+		[System.Runtime.InteropServices.DllImport("shfolder.dll", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
+		static extern uint SHGetFolderPath(IntPtr hwndOwner, int nFolder, IntPtr hToken, int dwFlags, StringBuilder lpszPath); 
+
+		static string GetUserProfileFolderPath ()
+		{
+			StringBuilder lpszPath = new StringBuilder(260);
+			uint result = SHGetFolderPath(IntPtr.Zero, CSIDL_PROFILE, IntPtr.Zero, 0, lpszPath);
+			if (result == COR_E_PLATFORMNOTSUPPORTED)
+				throw new PlatformNotSupportedException();
+
+			return lpszPath.ToString();
+		}
+#endif
 	}
 }

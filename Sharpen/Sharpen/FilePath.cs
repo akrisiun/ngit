@@ -463,4 +463,14 @@ namespace Sharpen
 			get { return Path.DirectorySeparatorChar.ToString (); }
 		}
 	}
+
+#if NET_3_5_BACKPORT
+	static class FilePathExtensions
+	{
+		public static bool HasFlag (this FileAccessPermissions p1, FileAccessPermissions p2)
+		{
+			return (((int) p1) & ((int) p2)) == ((int) p2);
+		}
+	}
+#endif
 }
