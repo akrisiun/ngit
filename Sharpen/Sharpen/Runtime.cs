@@ -88,7 +88,10 @@ namespace Sharpen
 #if NET_3_5_BACKPORT
 				properties ["user.home"] = GetUserProfileFolderPath ();
 #else
-				properties ["user.home"] = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
+				var home = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile).Trim ();
+				if (string.IsNullOrEmpty (home))
+					home = Environment.GetFolderPath (Environment.SpecialFolder.Personal).Trim ();
+				properties ["user.home"] = home;
 #endif
 				properties ["java.library.path"] = Environment.GetEnvironmentVariable ("PATH");
 				if (Path.DirectorySeparatorChar != '\\')
@@ -106,7 +109,7 @@ namespace Sharpen
 		
 		public static void SetProperty (string key, string value)
 		{
-//			throw new NotImplementedException ();
+			GetProperties () [key] = value;
 		}
 
 		public static Runtime GetRuntime ()
