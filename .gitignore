@@ -18,3 +18,5 @@ gen/resp
 gen/sharpen-options
 gen/source
 ngit.userprefs
+
+packages/
